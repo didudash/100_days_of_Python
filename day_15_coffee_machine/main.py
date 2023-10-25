@@ -1,3 +1,4 @@
+from art import logo
 
 MENU = {
     "espresso": {
@@ -22,7 +23,7 @@ MENU = {
             "coffee": 24,
         },
         "cost": 3.0,
-    }
+    },
 }
 
 resources = {
@@ -31,71 +32,87 @@ resources = {
     "coffee": 100,
 }
 
-def check_ingredients(MENU: dict, coffee_choice:str)-> dict:
-   coffee_ingredients = MENU[coffee_choice]['ingredients']
-   return coffee_ingredients
-
-def check_cost(MENU: dict, coffee_choice:str)-> float:
-    coffee_cost = MENU[coffee_choice]['cost']
-    return coffee_cost
-
-def update_remaining_resources(remaining_resources:dict, coffee_ingredients:dict):
-    new_resources = {key: remaining_resources[key] - coffee_ingredients.get(key, 0) for key in remaining_resources}
-    return new_resources 
-
-# update ooutput 
-def check_resources(remaining_resources:dict, coffee_ingredients:dict):
-    new_resources = update_remaining_resources(remaining_resources, coffee_ingredients)
-    depleted_resources = {key: value for key, value in new_resources.items() if value < 0}
-    if depleted_resources:
-        has_resources = False
-    else: 
-        has_resources = True
-    return has_resources, depleted_resources
-
-def get_coins()-> float: 
-    print("Please insert coins")
-    pennies = float(input("How many pennies? "))
-    nickels = float(input("How many nickels? "))
-    dimes = float(input("How many dimes? "))
-    quarters = float(input("How many quarters? "))
-
-    paid_amount = pennies*0.01 + nickels*0.05 + dimes*0.1 + quarters*0.25
-    return paid_amount
+COIN_VALUES = {
+    "pennies": 0.01,
+    "nickels": 0.05,
+    "dimes": 0.1,
+    "quarters": 0.25,
+}
 
 
+def get_coffee_ingredients(menu, coffee_choice):
+    return menu[coffee_choice]["ingredients"]
 
-def print_report(remaining_resources: dict)-> None: 
+
+def get_coffee_cost(menu, coffee_choice):
+    return menu[coffee_choice]["cost"]
+
+
+def compute_resources_after_order(remaining_resources, coffee_ingredients):
+    return {
+        key: remaining_resources[key] - coffee_ingredients.get(key, 0)
+        for key in remaining_resources
+    }
+
+
+def are_resources_sufficient(remaining_resources, coffee_ingredients):
+    updated_resources = compute_resources_after_order(
+        remaining_resources, coffee_ingredients
+    )
+    return all(value >= 0 for value in updated_resources.values()), updated_resources
+
+
+def collect_coins_and_compute_total():
+    total_amount = 0
+    for coin, value in COIN_VALUES.items():
+        count = float(input(f"How many {coin}? "))
+        total_amount += count * value
+    return total_amount
+
+
+def print_resources_report(remaining_resources):
     for key, value in remaining_resources.items():
-        print(f"{key}: {value}")
+        print(f"{key}: {value}g")
 
-def machine():
 
-    remaining_resources = resources 
+def coffee_machine():
+    print(logo)
+    current_resources = resources.copy()
     is_on = True
+
     while is_on:
-        coffee_choice = input("What would you like? (espresso/latte/capuccino): ")
-        if coffee_choice == "report":
-            print_report(remaining_resources)
-        elif coffee_choice == "off":
-            is_on = False 
-        else: 
-            coffee_ingredients = check_ingredients(MENU, coffee_choice)
-            has_resources, depleted_resources = check_resources(remaining_resources, coffee_ingredients)
-            if has_resources: 
-                paid_amount = get_coins()
-                coffee_cost = check_cost(MENU, coffee_choice)
-                if paid_amount >= coffee_cost: 
-                    change = paid_amount - coffee_cost
-                    print(f"Here is your ${round(change,1)} in change.")
-                    # include coffee emoji 
-                    print(f"Here is your {coffee_choice} Enjoy!")
-                    remaining_resources = update_remaining_resources(remaining_resources, coffee_ingredients)
+        choice = input("What would you like? (espresso/latte/cappuccino): ")
+
+        if choice == "report":
+            print_resources_report(current_resources)
+            continue
+        elif choice == "off":
+            is_on = False
+            continue
+
+        if choice in MENU:
+            ingredients_needed = get_coffee_ingredients(MENU, choice)
+            sufficient, updated_resources = are_resources_sufficient(
+                current_resources, ingredients_needed
+            )
+
+            if sufficient:
+                print("Please insert coins.")
+                amount_paid = collect_coins_and_compute_total()
+                coffee_price = get_coffee_cost(MENU, choice)
+
+                if amount_paid >= coffee_price:
+                    change = amount_paid - coffee_price
+                    print(f"Here is your ${round(change, 2)} in change.")
+                    print(f"Here is your {choice} Enjoy!")
+                    current_resources = updated_resources
                 else:
-                    print("Sorry that's not enough money. Money refunded.") 
-            else: 
-                print(f"Sorry there is not enough {', '.join(depleted_resources.keys())}")
-                exit()
+                    print("Sorry that's not enough money. Money refunded.")
+            else:
+                print("Sorry, not enough resources for your order!")
+        else:
+            print("Invalid choice. Please select a valid option.")
+
 
 if __name__ == "__main__":
-    machine()
+    coffee_machine()
