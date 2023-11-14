@@ -25,13 +25,13 @@ def teleport(turtle_obj, x, y) -> None:
     turtle_obj.pendown()
 
 
-def hirst_painting(radius, space, x_start=-270, y_start=-270):
+def hirst_painting(radius, space, x_start=-270, y_start=-270) -> None:
     for line in range(10):
         teleport(tim, x_start, y_start + (space) * (line))
         for _ in range(10):
             tim.dot(radius, choice(rgb_colors))
             tim.penup()
-            tim.forward(50)
+            tim.forward(space)
 
 
 hirst_painting(20, 50)
