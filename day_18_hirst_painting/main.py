@@ -19,13 +19,15 @@ for color in colors:
     rgb_colors.append((r, g, b))
 
 
-def teleport(turtle_obj, x, y) -> None:
+def teleport(turtle_obj: Turtle, x: float, y: float) -> None:
     turtle_obj.penup()
     turtle_obj.goto(x, y)
     turtle_obj.pendown()
 
 
-def hirst_painting(radius, space, x_start=-270, y_start=-270) -> None:
+def hirst_painting(
+    radius: int, space: int, x_start: int = -270, y_start: int = -270
+) -> None:
     for line in range(10):
         teleport(tim, x_start, y_start + (space) * (line))
         for _ in range(10):
