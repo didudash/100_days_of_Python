@@ -1,1 +1,1 @@
-I am following the "100 Days of Code" by The App Brewery 
+I am following the "100 Days of Code" challenge by The App Brewery 
