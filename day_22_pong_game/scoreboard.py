@@ -14,11 +14,11 @@ class Scoreboard(Turtle):
         self.penup()
         self._update_scoreboard()
 
-    def right_point(self):
+    def right_point(self) -> None:
         self.right_score += 1
         self._update_scoreboard()
 
-    def left_point(self):
+    def left_point(self) -> None:
         self.left_score += 1
         self._update_scoreboard()
 
