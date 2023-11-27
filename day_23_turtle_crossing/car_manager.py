@@ -11,7 +11,7 @@ class CarManager:
         self.all_cars = []
         self.car_speed = STARTING_MOVE_DISTANCE
 
-    def create_car(self):
+    def create_car(self) -> None:
         random_time = random.randint(1, 6)
         # It could be any number on the range
         if random_time == 3:
@@ -23,9 +23,9 @@ class CarManager:
             new_car.goto(300, random_y)
             self.all_cars.append(new_car)
 
-    def move_cars(self):
+    def move_cars(self) -> None:
         for car in self.all_cars:
             car.backward(self.car_speed)
 
-    def level_up(self):
+    def level_up(self) -> None:
         self.car_speed += MOVE_INCREMENT
