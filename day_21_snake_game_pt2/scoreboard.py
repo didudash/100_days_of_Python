@@ -15,12 +15,12 @@ class Scoreboard(Turtle):
         self.goto(x=0, y=260)
         self._update_scoreboard()
 
-    def _read_highest_score(self):
+    def _read_highest_score(self) -> int:
         with open("data.txt") as file:
             self.highest_score = file.read()
         return int(self.highest_score)
 
-    def _write_highest_score(self):
+    def _write_highest_score(self) -> None:
         with open("data.txt", mode="w") as file:
             file.write(f"{self.highest_score}")
 
@@ -37,7 +37,7 @@ class Scoreboard(Turtle):
         self.score += 1
         self._update_scoreboard()
 
-    def reset(self):
+    def reset(self) -> None:
         if self.score > self.highest_score:
             self.highest_score = self.score
             self._write_highest_score()
