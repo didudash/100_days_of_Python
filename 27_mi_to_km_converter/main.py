@@ -44,9 +44,9 @@ km_label.grid(column=2, row=1)
 km_label.config(padx=2, pady=2)
 
 # Buttons
-calc_buttom = Button(text="Calculate", command=button_clicked)
-calc_buttom.grid(column=1, row=2)
-calc_buttom.config(padx=2, pady=2)
+calc_button = Button(text="Calculate", command=button_clicked)
+calc_button.grid(column=1, row=2)
+calc_button.config(padx=2, pady=2)
 
 
 window.mainloop()
