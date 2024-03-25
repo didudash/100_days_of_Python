@@ -4,8 +4,9 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import string
+import pyperclip
 
-# Layout alingment can be improved
+# Layout alingment can be improved and it is optimized for Ubuntu
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -20,8 +21,9 @@ def generate_password():
     password_list += [random.choice(letters + digits + symbols) for _ in range(10)]
     random.shuffle(password_list)
     password = "".join(password_list)
-    password_entry.delete(0, END)
     password_entry.insert(0, password)
+    # to have password already on the clipboard
+    pyperclip.copy(password)
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
