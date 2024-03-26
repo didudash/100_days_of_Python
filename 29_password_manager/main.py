@@ -7,12 +7,37 @@ import string
 import pyperclip
 import json
 
-# Layout alingment can be improved and it is optimized for Ubuntu
+# Layout alingment can be improved and it is optimized for Windows
+# Make it closspattform
 
-# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+# ---------------------------- SEARCH  -------------------------------------- #
 
 
-def generate_password():
+def find_password() -> None:
+    website = website_entry.get()
+    try:
+        with open("data.json", "r") as data_file:
+            # Read
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error!", message="No Data File Found")
+    else:
+        if website in data:
+            messagebox.showinfo(
+                title="Info :)",
+                message=f"Email: {data[website]['email']} "
+                f"\nPassword:  {data[website]['password']}",
+            )
+        else:
+            messagebox.showinfo(
+                title="Error!", message="No details for the website exist"
+            )
+
+
+# ---------------------------- GENERATE PASSWORD ---------------------------- #
+
+
+def generate_password() -> None:
     # Includes both lowercase and uppercase letters
     letters = string.ascii_letters
     digits = string.digits
@@ -23,7 +48,7 @@ def generate_password():
     random.shuffle(password_list)
     password = "".join(password_list)
     password_entry.insert(0, password)
-    # to have password already on the clipboard
+    # To have password already on the clipboard
     pyperclip.copy(password)
 
 
@@ -31,7 +56,7 @@ def generate_password():
 
 
 # save on data.txt
-def save_password():
+def save_password() -> None:
     website = website_entry.get()
     email = email_entry.get()
     password = password_entry.get()
@@ -86,11 +111,11 @@ password_label.grid(column=0, row=3)
 password_label.config(padx=10, pady=2)
 
 # Entries
-website_entry = Entry(width=42)
-website_entry.grid(column=1, row=1, columnspan=2, sticky="w")
+website_entry = Entry(width=20)
+website_entry.grid(column=1, row=1, sticky="ew")
 website_entry.focus()
 
-email_entry = Entry(width=42)
+email_entry = Entry(width=51)
 email_entry.grid(column=1, row=2, columnspan=2, sticky="w")
 email_entry.insert(0, "my_email@gmail.com")
 
@@ -99,11 +124,14 @@ password_entry = Entry(width=20)
 password_entry.grid(column=1, row=3, sticky="ew")
 
 # Buttons
+search_button = Button(text="Search", width=14, command=find_password)
+search_button.grid(column=2, row=1, sticky="w")
+
 generate_button = Button(text="Generate Password", width=14, command=generate_password)
 # Adjust to ensure alignment without extra padding
 generate_button.grid(column=2, row=3, sticky="w")
 
-generate_button = Button(text="Add", width=39, command=save_password)
+generate_button = Button(text="Add", width=43, command=save_password)
 generate_button.grid(column=1, row=4, columnspan=2, sticky="w")
 
 window.mainloop()
