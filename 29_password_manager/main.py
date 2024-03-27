@@ -98,6 +98,7 @@ logo_img = PhotoImage(file="logo.png")
 canvas.create_image(100, 100, image=logo_img)
 canvas.grid(column=1, row=0)
 
+# Labels
 website_label = Label(text="Website:")
 website_label.grid(column=0, row=1)
 website_label.config(padx=10, pady=2)
