@@ -8,3 +8,5 @@ env/
 venv/
 .venv/
 
+# ignore specific file
+32_automated_bday_wisher/birthdays.csv
