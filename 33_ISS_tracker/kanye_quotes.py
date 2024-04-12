@@ -1,9 +1,12 @@
 from tkinter import *
+import requests
 
 
-def get_quote():
-    pass
-    # pending
+def get_quote() -> None:
+    response = requests.get(url="https://api.kanye.rest")
+    response.raise_for_status()
+    data = response.json()
+    canvas.itemconfig(quote_text, text=data["quote"])
 
 
 window = Tk()
@@ -18,7 +21,7 @@ quote_text = canvas.create_text(
     207,
     text="XXXX",
     width=250,
-    font=("Arial", 30, "bold"),
+    font=("Arial", 20, "bold"),
     fill="white",
 )
 canvas.grid(row=0, column=0)
