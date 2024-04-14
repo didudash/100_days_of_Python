@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 import smtplib
+import time
 
 """
 requests response codes: 
@@ -61,7 +62,7 @@ def is_position_close_and_dark(iss_position: dict) -> bool:
     is_target_location = (
         iss_position["lat"] - 5 <= lat <= iss_position["lat"] + 5
     ) and (iss_position["lng"] - 5 <= lng <= iss_position["lng"] + 5)
-    is_dark = time_now > sunset and time_now < sunrise
+    is_dark = time_now >= sunset or time_now <= sunrise
 
     if is_target_location and is_dark:
         return True
@@ -70,15 +71,14 @@ def is_position_close_and_dark(iss_position: dict) -> bool:
 
 
 if __name__ == "__main__":
-    iss_position = get_iss_position()
-    if is_position_close_and_dark(iss_position):
-        load_dotenv()
-        recipient_email = os.getenv("RECIPIENT_EMAIL")
-        send_email(
-            subject="Look UP!",
-            email_text="Look up the ISS is on the sky",
-            email=recipient_email,
-        )
-
-
-# BONUS: run the code every 60 seconds.
+    while True:
+        iss_position = get_iss_position()
+        if is_position_close_and_dark(iss_position):
+            load_dotenv()
+            recipient_email = os.getenv("RECIPIENT_EMAIL")
+            send_email(
+                subject="Look UP!",
+                email_text="Look up the ISS is on the sky",
+                email=recipient_email,
+            )
+        time.sleep(60)
