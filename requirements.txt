@@ -1,0 +1,6 @@
+numpy==1.26.3
+pandas==2.2.0
+pyperclip==1.8.2
+python-dotenv==1.0.1
+requests==2.31.0
+twilio==9.2.3
