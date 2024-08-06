@@ -1,11 +1,17 @@
 from dotenv import load_dotenv
 import os
 import requests
+from twilio.rest import Client
 
 load_dotenv()
 api_key = os.getenv("WEATHER_API_KEY")
 lat = float(os.getenv("LATITUDE"))
 lon = float(os.getenv("LONGITUDE"))
+account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+from_phone = os.getenv("FROM_PHONE")
+to_phone = os.getenv("TO_PHONE")
+
 owm_endpoint = "https://api.openweathermap.org/data/2.5/forecast"
 
 # cnt:4 is equal to 12 hours because the api give data every 3 hours
@@ -19,25 +25,31 @@ for timestamp in range(len(weather_data["list"])):
     # first weather id
     condition_codes.append(int(weather_data["list"][timestamp]["weather"][0]["id"]))
 if any(map(lambda x: x < 700, condition_codes)):
-    print("Bring an umbrella")
+    message_body = "Bring an umbrella ( ͡° ʖ̯ ͡°)"
 else:
-    print(
-        """
 
-                |
-                |
-      `.        |        .'
-        `.    .---.    .'
-           .~       ~.
-              O   O   
--- -- -- (             ) -- -- --
-               `-'     
-           ~.       .~
-        .'    ~---~    `.
-      .'        |        `.
-                |
-                |    
-                              
+    message_body = "Sunny vibez (=^･ｪ･^=))ﾉ彡"
 
-        """
-    )
+client = Client(account_sid, auth_token)
+
+message = client.messages.create(
+    body=message_body,
+    from_=from_phone,
+    to=to_phone,
+)
+print(message.status)
+
+
+#                 |
+#                 |
+#       `.        |        .'
+#         `.    .---.    .'
+#            .~       ~.
+#               O   O
+# -- -- -- (             ) -- -- --
+#                `-'
+#            ~.       .~
+#         .'    ~---~    `.
+#       .'        |        `.
+#                 |
+#                 |
