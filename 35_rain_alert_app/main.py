@@ -10,6 +10,7 @@ lon = float(os.getenv("LONGITUDE"))
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 from_phone = os.getenv("FROM_PHONE")
+from_phone_whatsapp = os.getenv("FROM_PHONE_WHATSAPP")
 to_phone = os.getenv("TO_PHONE")
 
 owm_endpoint = "https://api.openweathermap.org/data/2.5/forecast"
@@ -34,22 +35,9 @@ client = Client(account_sid, auth_token)
 
 message = client.messages.create(
     body=message_body,
-    from_=from_phone,
-    to=to_phone,
+    # from_=from_phone,
+    from_=f"whatsapp:{from_phone_whatsapp}",
+    # to=to_phone,
+    to=f"whatsapp:{to_phone}",
 )
 print(message.status)
-
-
-#                 |
-#                 |
-#       `.        |        .'
-#         `.    .---.    .'
-#            .~       ~.
-#               O   O
-# -- -- -- (             ) -- -- --
-#                `-'
-#            ~.       .~
-#         .'    ~---~    `.
-#       .'        |        `.
-#                 |
-#                 |
